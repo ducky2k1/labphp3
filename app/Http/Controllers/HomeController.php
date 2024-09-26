@@ -17,7 +17,7 @@ class HomeController extends Controller
     public function books()
     {
         $categories = Category::all();
-        $books = Book::all();
+        $books = Book::paginate(10);
         return view('books', compact('books', 'categories'));
     }
 
