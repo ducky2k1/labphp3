@@ -2,7 +2,13 @@
 
 @section('content')
     <div class="container">
-        <h1>Danh Sách Sách</h1>
+        @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
+        <h1>Danh Sách</h1>
+        <a href="{{ route('book.create') }}" class="btn btn-success">Add</a>
         <table class="table">
             <thead>
                 <tr>
@@ -12,6 +18,7 @@
                     <th>Publisher</th>
                     <th>Price</th>
                     <th>Publication Date</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -23,6 +30,19 @@
                         <td>{{ $book->publisher }}</td>
                         <td>${{ $book->price }}</td>
                         <td>{{ $book->publication }}</td>
+                        <td class="">
+                            <div class="d-flex">
+                                <a href="{{ route('book.edit', $book->id) }}" class="btn btn-primary">Edit</a>
+                                <form action="{{ route('book.delete', $book->id) }}" method="POST" style="display:inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger ms-3"
+                                        onclick="return confirm('Are you sure you want to delete this book?');">
+                                        Delete
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
                     </tr>
                 @empty
                     <tr>
@@ -31,5 +51,7 @@
                 @endforelse
             </tbody>
         </table>
+
+        {{ $books->links() }}
     </div>
 @endsection
